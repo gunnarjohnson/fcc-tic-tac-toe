@@ -10,5 +10,5 @@
 
 // Components
 @import 'components/_copyright';
+@import 'components/_grid';
 @import 'components/_react-app';
-@import 'components/_react-component';
