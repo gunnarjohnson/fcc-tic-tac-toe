@@ -1,22 +1,13 @@
 import React from 'react';
 import Copyright from './Copyright';
+import GameOver from './GameOver';
 import GridBox from './GridBox';
 
 class TicTacToe extends React.Component {
   state = {
     mark: 'X',
     turn: 1,
-    boxContent: {
-      1: undefined,
-      2: undefined, 
-      3: undefined, 
-      4: undefined, 
-      5: undefined, 
-      6: undefined, 
-      7: undefined, 
-      8: undefined, 
-      9: undefined
-    },
+    boxContent: {},
     gameCurrent: [
       {1: undefined, 2: undefined, 3: undefined},
       {4: undefined, 5: undefined, 6: undefined},
@@ -49,7 +40,7 @@ class TicTacToe extends React.Component {
           let currentRow = Object.keys(winRow);
           if (winRow[currentRow[0]] == winRow[currentRow[1]] && winRow[currentRow[1]] == winRow[currentRow[2]]) {
             // Winning row is successfully completed
-            alert(mark + ' wins!');
+            this.state.resetMsg = mark + " wins!";
             gameOver = !gameOver;
             break;
           }
@@ -60,26 +51,42 @@ class TicTacToe extends React.Component {
         turn++;
       } else if (!gameOver) {
         // 9 turns have occurred with no winning rows successfully completed - game is a draw
-        alert("It's a draw!");
+        this.state.resetMsg = "It's a draw!"
         gameOver = !gameOver;
       }
       mark == 'X' ? mark = 'O' : mark = 'X';
       // "Toggle" mark
-      this.setState(prevState => ({ 
+      this.setState({
         // Update state
-        mark,
-        turn,
-        boxContent,
-        gameCurrent,
-        gameOver
-      }));
+        mark, turn, boxContent, gameCurrent, gameOver
+      });
     } 
+  };
+
+  resetGame = () => {
+    this.setState({
+      mark: 'X',
+      turn: 1,
+      boxContent: {},
+      gameCurrent: [
+        {1: undefined, 2: undefined, 3: undefined},
+        {4: undefined, 5: undefined, 6: undefined},
+        {7: undefined, 8: undefined, 9: undefined},
+        {1: undefined, 4: undefined, 7: undefined},
+        {2: undefined, 5: undefined, 8: undefined},
+        {3: undefined, 6: undefined, 9: undefined},
+        {1: undefined, 5: undefined, 9: undefined},
+        {3: undefined, 5: undefined, 7: undefined}
+      ],
+      gameOver: false
+    });
   };
 
   render() {
     return (
       <div className="app-container">
         <div className="grid">
+          {this.state.gameOver && <GameOver resetGame={this.resetGame} resetMsg={this.state.resetMsg} />}
           <GridBox id="1" boxClick={this.boxClick} boxContent={this.state.boxContent[1]} gameOver={this.state.gameOver} />
           <GridBox id="2" boxClick={this.boxClick} boxContent={this.state.boxContent[2]} gameOver={this.state.gameOver} />
           <GridBox id="3" boxClick={this.boxClick} boxContent={this.state.boxContent[3]} gameOver={this.state.gameOver} />

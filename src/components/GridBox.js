@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ReactComponent = (props) => (
+const GridBox = (props) => (
   <button 
     id={props.id} 
     className="grid__box" 
@@ -11,4 +11,4 @@ const ReactComponent = (props) => (
   </button>
 );
 
-export default ReactComponent;
+export default GridBox;

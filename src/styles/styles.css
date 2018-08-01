@@ -10,5 +10,6 @@
 
 // Components
 @import 'components/_copyright';
+@import 'components/_game-over';
 @import 'components/_grid';
 @import 'components/_react-app';
