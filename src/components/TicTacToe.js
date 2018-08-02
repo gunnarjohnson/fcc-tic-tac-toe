@@ -18,49 +18,46 @@ class TicTacToe extends React.Component {
       {1: undefined, 5: undefined, 9: undefined},
       {3: undefined, 5: undefined, 7: undefined}
     ],
-    gameOver: false
+    gameOver: false,
+    resetMsg: ""
   };
 
   boxClick = (e) => {
-    // Click box
     let boxId = e.target.id;
     let mark = this.state.mark;
     let turn = this.state.turn;
     let boxContent = this.state.boxContent;
     let gameCurrent = this.state.gameCurrent;
     let gameOver = this.state.gameOver;
-    if (!boxContent[boxId]) {
-      // Box has no content
-      boxContent[boxId] = mark;
-      for (let winRow of gameCurrent) {
-        // Loop through winning rows
-        if (boxId in winRow) {
-          // Box is in winning row - update current game
-          winRow[boxId] = mark;
-          let currentRow = Object.keys(winRow);
-          if (winRow[currentRow[0]] == winRow[currentRow[1]] && winRow[currentRow[1]] == winRow[currentRow[2]]) {
-            // Winning row is successfully completed
-            this.state.resetMsg = mark + " wins!";
-            gameOver = !gameOver;
-            break;
-          }
+    let resetMsg = this.state.resetMsg;
+    // Add mark (X or O) to box content
+    boxContent[boxId] = mark;
+    // Loop through winning rows
+    for (let winRow of gameCurrent) {
+      // Box is in winning row - update current game
+      if (boxId in winRow) {
+        winRow[boxId] = mark;
+        let currentRow = Object.keys(winRow);
+        // Winning row is successfully completed - game over (declare winner)
+        if (winRow[currentRow[0]] == winRow[currentRow[1]] && winRow[currentRow[1]] == winRow[currentRow[2]]) {
+          resetMsg = mark + " wins!";
+          gameOver = !gameOver;
+          break;
         }
       }
-      if (turn < 9) {
-        // Less than 9 turns have occurred - go to next turn
-        turn++;
-      } else if (!gameOver) {
-        // 9 turns have occurred with no winning rows successfully completed - game is a draw
-        this.state.resetMsg = "It's a draw!"
-        gameOver = !gameOver;
-      }
-      mark == 'X' ? mark = 'O' : mark = 'X';
-      // "Toggle" mark
-      this.setState({
-        // Update state
-        mark, turn, boxContent, gameCurrent, gameOver
-      });
-    } 
+    }
+    // Less than 9 turns -> next turn; more than 9 turns -> game over (declare draw)
+    if (turn < 9) {
+      turn++;
+    } else if (!gameOver) {
+      resetMsg = "It's a draw!";
+      gameOver = !gameOver;
+    }
+    // "Toggle" mark and update state
+    mark == 'X' ? mark = 'O' : mark = 'X';
+    this.setState({
+      mark, turn, boxContent, gameCurrent, gameOver, resetMsg
+    });
   };
 
   resetGame = () => {
@@ -78,7 +75,8 @@ class TicTacToe extends React.Component {
         {1: undefined, 5: undefined, 9: undefined},
         {3: undefined, 5: undefined, 7: undefined}
       ],
-      gameOver: false
+      gameOver: false,
+      resetMsg: ""
     });
   };
 

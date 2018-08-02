@@ -5,7 +5,7 @@ const GridBox = (props) => (
     id={props.id} 
     className="grid__box" 
     onClick={props.boxClick}
-    disabled={props.gameOver}
+    disabled={props.gameOver || !!props.boxContent}
   >
     {!!props.boxContent && <p>{props.boxContent}</p>}
   </button>
