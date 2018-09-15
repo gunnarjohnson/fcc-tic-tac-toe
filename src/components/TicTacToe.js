@@ -10,6 +10,7 @@ class TicTacToe extends React.Component {
     mark: 'X',
     turn: 1,
     boxContent: {},
+    boxDisabled: true,
     gameCurrent: [
       {1: undefined, 2: undefined, 3: undefined},
       {4: undefined, 5: undefined, 6: undefined},
@@ -27,14 +28,19 @@ class TicTacToe extends React.Component {
   };
 
   boxClick = (e) => {
-    let boxId = e.target.id;
+    let boxId;
+    let user = this.state.user;
+    let mode = this.state.mode;
     let mark = this.state.mark;
     let turn = this.state.turn;
     let boxContent = this.state.boxContent;
+    let boxDisabled = this.state.boxDisabled;
     let gameCurrent = this.state.gameCurrent;
     let gameOptions = this.state.gameOptions;
     let gameOver = this.state.gameOver;
     let resetMsg = this.state.resetMsg;
+    // Check value
+    isNaN(e) ? boxId = e.target.id : boxId = e;    
     // Add mark (X or O) to box content
     boxContent[boxId] = mark;
     // Loop through winning rows
@@ -45,6 +51,7 @@ class TicTacToe extends React.Component {
         let currentRow = Object.keys(winRow);
         // Winning row is successfully completed - game over (declare winner)
         if (winRow[currentRow[0]] == winRow[currentRow[1]] && winRow[currentRow[1]] == winRow[currentRow[2]]) {
+          boxDisabled = true;
           gameOptions = !gameOptions;
           gameOver = !gameOver;
           resetMsg = mark + " wins!";
@@ -60,10 +67,23 @@ class TicTacToe extends React.Component {
       gameOver = !gameOver;
       resetMsg = "It's a draw!";
     }
-    // "Toggle" mark and update state
+    // "Toggle" mark
     mark == 'X' ? mark = 'O' : mark = 'X';
+    // Check mode and "toggle" user
+    if (mode == 'Single Player') {
+      if (user == 'Player') {
+        user = 'Computer';
+        boxDisabled = true;
+      } else {
+        user = 'Player';
+        boxDisabled = false;
+      }
+    } else if (mode == 'Two Player') {
+      user == 'Player 1' ? user = 'Player 2' : user = 'Player 1';
+    }
+    // Update state
     this.setState({
-      mark, turn, boxContent, gameCurrent, gameOptions, gameOver, resetMsg
+      user, mark, turn, boxContent, boxDisabled, gameCurrent, gameOptions, gameOver, resetMsg
     });
   };
 
@@ -93,7 +113,8 @@ class TicTacToe extends React.Component {
 
   modeSinglePlayer = () => {
     this.setState({ 
-      mode: 1,
+      user: 'Computer',
+      mode: 'Single Player',
       gameOptions: false,
       gameInit: false
     });
@@ -101,7 +122,8 @@ class TicTacToe extends React.Component {
 
   modeTwoPlayer = () => {
     this.setState({ 
-      mode: 2,
+      mode: 'Two Player',
+      boxDisabled: false,
       gameOptions: false,
       gameInit: false
     });
@@ -123,6 +145,25 @@ class TicTacToe extends React.Component {
     });
   };
 
+  computerTurn = () => {
+    let computerSelection;
+    do {
+      computerSelection = Math.floor(Math.random() * 9 + 1);
+    }
+    while (this.state.boxContent.hasOwnProperty(computerSelection));
+    this.boxClick(computerSelection);
+  }
+
+  componentDidUpdate() {
+    if (!this.state.gameOver) {
+      if (this.state.mode === 'Single Player' && this.state.user === 'Computer') {
+        setTimeout(() => {
+          this.computerTurn();
+        }, 1000);
+      }
+    }
+  }
+
   render() {
     return (
       <div className="app-container">
@@ -137,20 +178,15 @@ class TicTacToe extends React.Component {
               resetMsg={this.state.resetMsg} 
             />
           }
-          <GridBox 
-            id="1" 
-            boxClick={this.boxClick} 
-            boxContent={this.state.boxContent[1]} 
-            gameOver={this.state.gameOver} 
-          />
-          <GridBox id="2" boxClick={this.boxClick} boxContent={this.state.boxContent[2]} gameOver={this.state.gameOver} />
-          <GridBox id="3" boxClick={this.boxClick} boxContent={this.state.boxContent[3]} gameOver={this.state.gameOver} />
-          <GridBox id="4" boxClick={this.boxClick} boxContent={this.state.boxContent[4]} gameOver={this.state.gameOver} />
-          <GridBox id="5" boxClick={this.boxClick} boxContent={this.state.boxContent[5]} gameOver={this.state.gameOver} />
-          <GridBox id="6" boxClick={this.boxClick} boxContent={this.state.boxContent[6]} gameOver={this.state.gameOver} />
-          <GridBox id="7" boxClick={this.boxClick} boxContent={this.state.boxContent[7]} gameOver={this.state.gameOver} />
-          <GridBox id="8" boxClick={this.boxClick} boxContent={this.state.boxContent[8]} gameOver={this.state.gameOver} />
-          <GridBox id="9" boxClick={this.boxClick} boxContent={this.state.boxContent[9]} gameOver={this.state.gameOver} />
+          <GridBox id="1" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[1]} />
+          <GridBox id="2" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[2]} />
+          <GridBox id="3" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[3]} />
+          <GridBox id="4" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[4]} />
+          <GridBox id="5" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[5]} />
+          <GridBox id="6" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[6]} />
+          <GridBox id="7" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[7]} />
+          <GridBox id="8" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[8]} />
+          <GridBox id="9" boxClick={this.boxClick} boxDisabled={this.state.boxDisabled} boxContent={this.state.boxContent[9]} />
         </div>
         <Copyright />
       </div>
