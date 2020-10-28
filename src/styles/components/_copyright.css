@@ -9,11 +9,11 @@ footer {
 }
 
 .copyright {
-  color: $white;
+  color: white;
   font-family: $fontContent;
 
   &__link {
-    color: $white;
+    color: white;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 

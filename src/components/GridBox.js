@@ -7,7 +7,7 @@ const GridBox = (props) => (
     onClick={props.boxClick}
     disabled={props.boxDisabled || !!props.boxContent}
   >
-    {!!props.boxContent && <p>{props.boxContent}</p>}
+    {!!props.boxContent && props.boxContent}
   </button>
 );
 

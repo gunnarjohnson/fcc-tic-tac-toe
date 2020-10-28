@@ -4,7 +4,11 @@
   display: flex;
   flex-wrap: wrap;
   position: relative;
-  width: 450px;
+  width: 100%;
+
+  @media screen and (min-width: $device-md) {
+    width: 450px;
+  }
 
   &__box {
     flex-basis: 33.33%;
@@ -13,5 +17,8 @@
     background-color: white;
     border: 1px solid black;
     box-sizing: border-box;
+    color: black;
+    font-family: $fontDefault;
+    font-size: 4em;
   }
 }

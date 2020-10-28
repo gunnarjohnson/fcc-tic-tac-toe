@@ -2,7 +2,7 @@ import React from 'react';
 
 class Copyright extends React.Component {
   state = {
-    copyrightYear: 2018,
+    copyrightYear: 2017,
     currentYear: undefined
   };
 

@@ -1,45 +1,36 @@
 import React from 'react';
+import Button from './Button';
 
 const GameOptions = (props) => (
   <div className="game-options">
     <div className="game-options-container">
-      <h2 className="game-options__title game-options__title--init">
+      <h2 className="game-options__title">
         {
           /* Options -> Init: Title */
           props.gameInit && 'Select Mode' 
+        }
+        {
+          /* Options -> Select Mark */
+          !props.gameInit && !props.markSelected && 'Select Mark'
         }
         {
           /* Options -> Reset: Title */
           props.gameOver && props.resetMsg 
         }
       </h2>
-      <button 
-        className="game-options__button game-options__button--init" 
-        onClick=
-        {
-          /* Options -> Init: Button 1 else Options -> Reset: Button */
-          props.gameInit ? props.mode1P : props.resetGame
-        }
-      >
-        {
-          /* Options -> Init: Button 1 */
-          props.gameInit && 'Single Player'
-        }
-        {
-          /* Options -> Reset: Button */
-          props.gameOver && 'Play again?'
-        }
-      </button>
-      {
-        /* Options -> Init: Button 2 */
-        props.gameInit && 
-        <button 
-          className="game-options__button game-options__button--init" 
-          onClick={props.mode2P}
-        >
-          Two Player
-        </button>
+      {props.gameInit &&
+        <React.Fragment>
+          <Button action={props.mode1P} content='Single Player' />
+          <Button action={props.mode2P} content='Two Player' />
+        </React.Fragment>
       }
+      {!props.gameInit && !props.markSelected &&
+        <React.Fragment>
+          <Button action={props.selectX} content='Select X' />
+          <Button action={props.selectO} content='Select O' />
+        </React.Fragment>
+      }
+      {props.gameOver && <Button action={props.resetGame} content='Play again?' />}
     </div>
   </div>
 );
