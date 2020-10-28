@@ -20,7 +20,7 @@ module.exports = {
 	plugins: [
 		new FaviconsWebpackPlugin({
 			logo: './src/assets/icons/icon.png',
-			prefix: 'assets/icons/',
+			prefix: './assets/icons/',
 			title: '',
 			icons: {
 				android: true,
